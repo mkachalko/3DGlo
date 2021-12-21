@@ -1,5 +1,3 @@
-import moduleOne from "./modules/one";
-import moduleTwo from "./modules/two";
+import timer from "./modules/timer";
 
-moduleOne();
-moduleTwo();
+timer("01 january 2022");
