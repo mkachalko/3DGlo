@@ -1,14 +1,11 @@
-const calc = () => {
-  // const square = document.querySelector(".calc-square");
-  // const flat = document.querySelector(".calc-count");
-  // const day = document.querySelector(".calc-day");
+const calc = (price = 100) => {
+  const square = document.querySelector(".calc-square");
+  const flat = document.querySelector(".calc-count");
+  const day = document.querySelector(".calc-day");
   const inputsArr = [];
-
-  inputsArr.push(
-    document.querySelector(".calc-square"),
-    document.querySelector(".calc-count"),
-    document.querySelector(".calc-day")
-  );
+  const type = document.querySelector(".calc-type");
+  const total = document.getElementById("total");
+  const calcBlock = document.querySelector(".calc-block");
 
   const inputsValid = () => {
     inputsArr.forEach((item) => {
@@ -16,8 +13,51 @@ const calc = () => {
     });
   };
 
+  const countInterval = (value, time, span) => {
+    let count = 0;
+    let interval = setInterval(() => {
+      if (count >= value) {
+        clearInterval(interval);
+      }
+      span.textContent = count;
+      count++;
+    }, time);
+  };
+
+  const countCalc = () => {
+    const typeValue = +type.options[type.selectedIndex].value;
+
+    let totalValue = 0;
+    let flatValue = 1;
+    let dayValue = 1;
+
+    if (flat.value > 1) {
+      flatValue += +flat.value / 10;
+    }
+
+    if (day.value && day.value < 5) {
+      dayValue = 2;
+    } else if (day.value && day.value < 10) {
+      dayValue = 1.5;
+    }
+
+    if (type.value && square.value) {
+      totalValue = price * typeValue * square.value * flatValue * dayValue;
+    }
+
+    countInterval(totalValue, 1, total);
+  };
+
+  inputsArr.push(square, flat, day);
+
   inputsArr.forEach((item) => {
     item.addEventListener("input", inputsValid);
+  });
+
+  calcBlock.addEventListener("change", (e) => {
+    if (e.target === type || e.target === square || e.target === flat || e.target === day) {
+      countCalc();
+    }
   });
 };
 
