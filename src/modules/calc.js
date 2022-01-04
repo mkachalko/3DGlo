@@ -13,15 +13,38 @@ const calc = (price = 100) => {
     });
   };
 
-  const countInterval = (value, time, span) => {
-    let count = 0;
-    let interval = setInterval(() => {
-      if (count >= value) {
-        clearInterval(interval);
+  // Через интервал
+  // const countInterval = (value, time, span) => {
+  //   let count = 0;
+  //   let interval = setInterval(() => {
+  //     if (count >= value) {
+  //       clearInterval(interval);
+  //     }
+  //     span.textContent = count;
+  //     count++;
+  //   }, time);
+  // };
+
+  // Через анимацию
+  const animate = ({ timing, draw, duration }) => {
+    let start = performance.now();
+
+    requestAnimationFrame(function animate(time) {
+      // timeFraction изменяется от 0 до 1
+      let timeFraction = (time - start) / duration;
+      if (timeFraction > 1) {
+        timeFraction = 1;
       }
-      span.textContent = count;
-      count++;
-    }, time);
+
+      // вычисление текущего состояния анимации
+      let progress = timing(timeFraction);
+
+      draw(progress); // отрисовать её
+
+      if (timeFraction < 1) {
+        requestAnimationFrame(animate);
+      }
+    });
   };
 
   const countCalc = () => {
@@ -43,9 +66,18 @@ const calc = (price = 100) => {
 
     if (type.value && square.value) {
       totalValue = price * typeValue * square.value * flatValue * dayValue;
+      animate({
+        duration: 1500,
+        timing(timeFraction) {
+          return timeFraction;
+        },
+        draw(progress) {
+          total.textContent = Math.floor(progress * totalValue);
+        },
+      });
     }
 
-    countInterval(totalValue, 1, total);
+    // countInterval(totalValue, 1, total);
   };
 
   inputsArr.push(square, flat, day);
