@@ -1,3 +1,5 @@
+import { animate } from "./helpers";
+
 const calc = (price = 100) => {
   const square = document.querySelector(".calc-square");
   const flat = document.querySelector(".calc-count");
@@ -10,40 +12,6 @@ const calc = (price = 100) => {
   const inputsValid = () => {
     inputsArr.forEach((item) => {
       item.value = item.value.replace(/\D/gi, "");
-    });
-  };
-
-  // Через интервал
-  // const countInterval = (value, time, span) => {
-  //   let count = 0;
-  //   let interval = setInterval(() => {
-  //     if (count >= value) {
-  //       clearInterval(interval);
-  //     }
-  //     span.textContent = count;
-  //     count++;
-  //   }, time);
-  // };
-
-  // Через анимацию
-  const animate = ({ timing, draw, duration }) => {
-    let start = performance.now();
-
-    requestAnimationFrame(function animate(time) {
-      // timeFraction изменяется от 0 до 1
-      let timeFraction = (time - start) / duration;
-      if (timeFraction > 1) {
-        timeFraction = 1;
-      }
-
-      // вычисление текущего состояния анимации
-      let progress = timing(timeFraction);
-
-      draw(progress); // отрисовать её
-
-      if (timeFraction < 1) {
-        requestAnimationFrame(animate);
-      }
     });
   };
 
@@ -76,8 +44,6 @@ const calc = (price = 100) => {
         },
       });
     }
-
-    // countInterval(totalValue, 1, total);
   };
 
   inputsArr.push(square, flat, day);
