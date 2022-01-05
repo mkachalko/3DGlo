@@ -43,6 +43,8 @@ const calc = (price = 100) => {
           total.textContent = Math.floor(progress * totalValue);
         },
       });
+    } else {
+      total.textContent = 0;
     }
   };
 
