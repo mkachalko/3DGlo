@@ -16,11 +16,28 @@ const sendForm = ({ formId, someElem = [] }) => {
 
     let error = false;
 
+    const clue = (input, str) => {
+      const clue = document.createElement("div");
+      clue.classList.add("clue");
+      clue.style.color = "red";
+      if (formId == "form1") {
+        clue.style.marginTop = "-30px";
+      }
+      if (input == message) {
+        clue.style.marginBottom = "15px";
+      }
+      clue.style.fontSize = "12px";
+      clue.textContent = str;
+      input.after(clue);
+      setTimeout(() => clue.remove(), 8000);
+    };
+
     inputList.forEach((input) => {
       switch (input) {
         case name:
           if (/[^а-я\s]+/gi.test(input.value)) {
             error = true;
+            clue(input, "Только кириллица!");
           }
           break;
         case email:
@@ -29,16 +46,19 @@ const sendForm = ({ formId, someElem = [] }) => {
             !/[\w\-\_\!\~\*\'\.]+@([\w]+\.)+[\w]+/gi.test(input.value)
           ) {
             error = true;
+            clue(input, "Введите в формате name@domain.com");
           }
           break;
         case phone:
           if (/[^\d\(\)\+\-]+/g.test(input.value)) {
             error = true;
+            clue(input, "Введите только + () и цифры!");
           }
           break;
         case message:
           if (/[^а-я0-9\s\-\.\,\!\?\:]+/gi.test(input.value)) {
             error = true;
+            clue(input, "Введите только кириллицу и знаки препинания!");
           }
           break;
       }
@@ -102,6 +122,11 @@ const sendForm = ({ formId, someElem = [] }) => {
     });
 
     if (validate(inputs)) {
+      const clues = document.querySelectorAll(".clue");
+
+      clues.forEach((clue) => {
+        clue.remove();
+      });
       statusBlock.style.display = "flex";
       statusBlock.style.justifyContent = "center";
       statusBlock.style.marginTop = "-25px";
@@ -113,10 +138,12 @@ const sendForm = ({ formId, someElem = [] }) => {
           console.log(data);
           cancelAnimationFrame(loadAnimate);
           statusBlock.textContent = successText;
+          setTimeout(() => statusBlock.remove(), 5000);
           inputs.forEach((input) => (input.value = ""));
         })
         .catch((error) => {
           statusBlock.textContent = errorText;
+          setTimeout(() => statusBlock.remove(), 5000);
         });
     } else {
       alert("Поля формы заполнены неверно!");
