@@ -6,6 +6,7 @@ import calc from "./modules/calc";
 import tabs from "./modules/tabs";
 import slider from "./modules/slider";
 import sendForm from "./modules/sendForm";
+import scroll from "./modules/scroll";
 
 timer("15 january 2022");
 menu();
@@ -29,3 +30,4 @@ sendForm({
 sendForm({
   formId: "form3",
 });
+scroll();
